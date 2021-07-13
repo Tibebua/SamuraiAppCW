@@ -33,6 +33,7 @@ namespace SamuraiAppCW
             services.AddDbContext<SamuraiContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SamuraiContext"));
+                options.EnableSensitiveDataLogging();
             });
             services.AddScoped<ISamuraiRepository, SamuraiRepository>();
             services.AddScoped<ISamuraiService, SamuraiService>();
