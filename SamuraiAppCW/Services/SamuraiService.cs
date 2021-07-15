@@ -13,7 +13,7 @@ namespace SamuraiAppCW.Services
 
         public SamuraiService(ISamuraiRepository samuraiRepo)
         {
-            _samuraiRepo = samuraiRepo;
+            _samuraiRepo = samuraiRepo ?? throw new ArgumentNullException(nameof(samuraiRepo));
         }
 
         public async Task<List<Samurai>> GetAllSamurais()

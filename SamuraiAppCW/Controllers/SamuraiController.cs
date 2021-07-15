@@ -17,7 +17,7 @@ namespace SamuraiAppCW.Controllers
 
         public SamuraiController(ISamuraiService samuraiService)
         {
-            _samuraiService = samuraiService;
+            _samuraiService = samuraiService ?? throw new ArgumentNullException(nameof(samuraiService));
         }
 
         [HttpGet("GetAllSamurais")]
