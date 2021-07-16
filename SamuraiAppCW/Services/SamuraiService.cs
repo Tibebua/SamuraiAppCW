@@ -32,5 +32,10 @@ namespace SamuraiAppCW.Services
         {
             return await _samuraiRepo.CreateSamurai(samurai);
         }
+
+        public async Task<bool> CreateSamurais(List<Samurai> samurais)
+        {
+            return await _samuraiRepo.CreateSamurais(samurais);
+        }
     }
 }

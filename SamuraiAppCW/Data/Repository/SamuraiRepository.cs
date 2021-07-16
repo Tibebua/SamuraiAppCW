@@ -34,5 +34,12 @@ namespace SamuraiAppCW.Data.Repository
             _context.SaveChanges();
             return obj.Entity;
         }
+
+        public async Task<bool> CreateSamurais(List<Samurai> samurais)
+        {
+            await _context.Samurais.AddRangeAsync(samurais);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

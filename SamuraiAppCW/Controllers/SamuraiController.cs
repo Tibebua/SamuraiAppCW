@@ -20,7 +20,7 @@ namespace SamuraiAppCW.Controllers
             _samuraiService = samuraiService ?? throw new ArgumentNullException(nameof(samuraiService));
         }
 
-        [HttpGet("GetAllSamurais")]
+        [HttpGet("GetAllSamurais", Name ="GetAllSamurais")]
         public async Task<ActionResult<List<Samurai>>> GetSamurais()
         {
             var samurais = await _samuraiService.GetAllSamurais();
@@ -47,6 +47,13 @@ namespace SamuraiAppCW.Controllers
         {
             var entity = await _samuraiService.CreateSamurai(samurai);
             return CreatedAtRoute(nameof(GetSamurai), new { id = samurai.Id }, entity); // here u can pass the "samurai" too
+        }
+
+        [HttpPost("AddSamurais")]
+        public async Task<ActionResult<List<Samurai>>> CreateSamurais([FromBody] List<Samurai> samurais)
+        {
+            var entities = await _samuraiService.CreateSamurais(samurais);
+            return Ok();
         }
 
     }
