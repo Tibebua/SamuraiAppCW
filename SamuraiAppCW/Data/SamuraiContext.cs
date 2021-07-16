@@ -13,7 +13,7 @@ namespace SamuraiAppCW.Data
         {}
 
         public virtual DbSet<Samurai> Samurais { get; set; }
-        public virtual DbSet<Quotes> Quotes { get; set; }
+        public virtual DbSet<Quote> Quotes { get; set; }
 
     }
 }
