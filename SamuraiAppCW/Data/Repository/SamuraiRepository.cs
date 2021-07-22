@@ -18,8 +18,28 @@ namespace SamuraiAppCW.Data.Repository
 
         public async Task<List<Samurai>> GetSamurais()
         {
-            var samurais = await _context.Samurais.ToListAsync();
+            var samurais = await _context.Samurais.Include(s => s.Quotes).ToListAsync();
             return samurais;
+        }
+
+        public async Task<Samurai> GetSamurai(int id)
+        {
+            var samurai = await _context.Samurais.Include(s => s.Quotes).Where(s => s.Id == id).FirstOrDefaultAsync();
+            return samurai;
+        }
+
+        public async Task<Samurai> CreateSamurai(Samurai samurai)
+        {
+            var obj = await _context.Samurais.AddAsync(samurai);
+            _context.SaveChanges();
+            return obj.Entity;
+        }
+
+        public async Task<bool> CreateSamurais(List<Samurai> samurais)
+        {
+            await _context.Samurais.AddRangeAsync(samurais);
+            _context.SaveChanges();
+            return true;
         }
     }
 }

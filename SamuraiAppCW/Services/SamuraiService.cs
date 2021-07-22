@@ -21,5 +21,21 @@ namespace SamuraiAppCW.Services
             var allSamurais = await _samuraiRepo.GetSamurais();
             return allSamurais;
         }
+
+        public async Task<Samurai> GetSamurai(int id)
+        {
+            var Samurai = await _samuraiRepo.GetSamurai(id);
+            return Samurai;
+        }
+
+        public async Task<Samurai> CreateSamurai(Samurai samurai)
+        {
+            return await _samuraiRepo.CreateSamurai(samurai);
+        }
+
+        public async Task<bool> CreateSamurais(List<Samurai> samurais)
+        {
+            return await _samuraiRepo.CreateSamurais(samurais);
+        }
     }
 }

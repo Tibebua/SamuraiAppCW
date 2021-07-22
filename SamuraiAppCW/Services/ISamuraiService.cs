@@ -9,5 +9,8 @@ namespace SamuraiAppCW.Services
     public interface ISamuraiService
     {
         Task<List<Samurai>> GetAllSamurais();
+        Task<Samurai> GetSamurai(int id);
+        Task<Samurai> CreateSamurai(Samurai samurai);
+        Task<bool> CreateSamurais(List<Samurai> samurais);
     }
 }
