@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SamuraiAppCW.Data;
 using SamuraiAppCW.Data.Repository;
 using SamuraiAppCW.Services;
@@ -27,6 +28,8 @@ namespace SamuraiAppCW
             );
             services.AddDbContext<SamuraiContext>(options =>
             {
+                options.UseLoggerFactory(LoggerFactory.Create(builder =>
+                    builder.AddConsole().AddFilter(DbLoggerCategory.Database.Command.Name, LogLevel.Information)));
                 options.UseSqlServer(Configuration.GetConnectionString("SamuraiContext"));
                 options.EnableSensitiveDataLogging();
             });

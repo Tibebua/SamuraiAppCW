@@ -15,8 +15,8 @@ namespace SamuraiAppCW.Data
         public virtual DbSet<Samurai> Samurais { get; set; }
         public virtual DbSet<Quote> Quotes { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.LogTo(Console.WriteLine);
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //    => optionsBuilder.LogTo(Console.WriteLine);
 
     }
 }
