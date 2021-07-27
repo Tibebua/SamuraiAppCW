@@ -16,6 +16,7 @@ namespace SamuraiAppCW.Data.Repository
             _context = context;
         }
 
+        // Samurai
         public async Task<List<Samurai>> GetSamurais()
         {
             var samurais = await _context.Samurais.Include(s => s.Quotes).ToListAsync();
@@ -41,5 +42,6 @@ namespace SamuraiAppCW.Data.Repository
             _context.SaveChanges();
             return true;
         }
+
     }
 }
