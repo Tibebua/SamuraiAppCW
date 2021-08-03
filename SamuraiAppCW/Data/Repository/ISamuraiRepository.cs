@@ -12,5 +12,8 @@ namespace SamuraiAppCW.Data.Repository
         Task<Samurai> GetSamurai(int id);
         Task<Samurai> CreateSamurai(Samurai samurai);
         Task<bool> CreateSamurais(List<Samurai> samurais);
+        Task<Battle> CreateBattle(Battle battle);
+        Task<Battle> GetBattle(int id);
+        Task<Samurai> GetSamuraiWithHisBattles(int samuId);
     }
 }

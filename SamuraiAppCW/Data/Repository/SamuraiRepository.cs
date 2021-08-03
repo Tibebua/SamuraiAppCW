@@ -29,6 +29,13 @@ namespace SamuraiAppCW.Data.Repository
             return samurai;
         }
 
+        public async Task<Samurai> GetSamuraiWithHisBattles(int samuId)
+        {
+            var samurai = await _context.Samurais.Include(s => s.SamuraiBattles)
+                .ThenInclude(sb => sb.Battle).Where(sa => sa.Id == samuId).FirstOrDefaultAsync();
+            return samurai;
+        }
+
         public async Task<Samurai> CreateSamurai(Samurai samurai)
         {
             var obj = await _context.Samurais.AddAsync(samurai);
@@ -41,6 +48,20 @@ namespace SamuraiAppCW.Data.Repository
             await _context.Samurais.AddRangeAsync(samurais);
             _context.SaveChanges();
             return true;
+        }
+
+        // Battle
+        public async Task<Battle> CreateBattle(Battle battle)
+        {
+            var obj = await _context.Battles.AddAsync(battle);
+            _context.SaveChanges();
+            return obj.Entity;
+        }
+
+        public async Task<Battle> GetBattle(int id)
+        {
+            var battle = await _context.Battles.FirstOrDefaultAsync(b => b.BattleId == id);
+            return battle;
         }
 
     }
