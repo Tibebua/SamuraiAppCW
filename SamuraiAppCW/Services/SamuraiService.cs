@@ -1,6 +1,5 @@
 ﻿using SamuraiAppCW.Data.Repository;
 using SamuraiAppCW.Models;
-using SamuraiAppCW.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

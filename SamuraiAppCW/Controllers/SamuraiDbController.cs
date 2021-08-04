@@ -63,22 +63,31 @@ namespace SamuraiAppCW.Controllers
 
         //BATTLE
         [HttpGet("GetSamuraiWithBattlesViaSelect/{samuraiId}", Name = "GetSamuraiWithBattlesViaSelect")]
-        public async Task<ActionResult> GetSamuraiWithBattlesViaSelect(int samuraiId)
+        public async Task<ActionResult<SamuraiEntity>> GetSamuraiWithBattlesViaSelect(int samuraiId)
         {
-            //var samuraiWithBattles = await _samuraiContext.Samurais.Include(s => s.SamuraiBattles)
-            //    .ThenInclude(sb => sb.Battle).Where(s => s.Id == samuraiId).FirstOrDefaultAsync();
-            var samuraiWithBattles = _samuraiContext.Samurais.Where(s => s.Id == samuraiId).Select(s => new
+            //var samuraiWithBattles = _samuraiContext.Samurais.Where(s => s.Id == samuraiId).Select(s => new
+            //{
+            //    Id = s.Id,
+            //    Name = s.Name,
+            //    Quotes = s.Quotes.Select(q => new { q.QuoteId, q.Text }),
+            //    Battles = s.SamuraiBattles.Select(s => s.Battle).Select(b => new { b.BattleId, b.Name, b.StartDate, b.EndDate })
+            //});
+
+            var samuraiWithBattles = _samuraiContext.Samurais.Where(s => s.Id == samuraiId).Select(s => new SamuraiEntity
             {
                 Id = s.Id,
                 Name = s.Name,
-                Quotes = s.Quotes.Select(q => new { q.QuoteId, q.Text }).ToList(),
-                Battles = s.SamuraiBattles.Select(s => s.Battle).Select(b => new { b.BattleId, b.Name, b.StartDate, b.EndDate }).ToList()
+                QuoteEntities = s.Quotes.Select(q => new QuoteEntity { QuoteId = q.QuoteId, Text = q.Text }),
+                BattleEntities = s.SamuraiBattles.Select(sb => sb.Battle)
+                .Select(b => new BattleEntity { BattleId = b.BattleId, Name = b.Name, StartDate = b.StartDate, EndDate = b.EndDate })
             });
+
+
             return Ok(samuraiWithBattles);
         }
 
-        [HttpGet("GetSamuraiWithBattlesViaEntity/{samuraiId}", Name = "GetSamuraiWithBattlesViaEntity")]
-        public async Task<ActionResult<SamuraiEntity>> GetSamuraiWithBattlesViaEntity(int samuraiId)
+        [HttpGet("GetSamuraiWithBattlesViaInclude/{samuraiId}", Name = "GetSamuraiWithBattlesViaInclude")]
+        public async Task<ActionResult<SamuraiEntity>> GetSamuraiWithBattlesViaInclude(int samuraiId)
         {
             var samuraiWithBattles = await _samuraiContext.Samurais.Include(s => s.Quotes).Include(s => s.SamuraiBattles)
                 .ThenInclude(sb => sb.Battle).Where(s => s.Id == samuraiId).FirstOrDefaultAsync();
@@ -99,6 +108,21 @@ namespace SamuraiAppCW.Controllers
             return Ok(samuraiWithBattles);
         }
 
+        [HttpGet("GetBattleAndInvolvedSamuraisViaInclude/{battleId}", Name = "GetBattleAndInvolvedSamuraisViaInclude")]
+        public async Task<ActionResult<List<BattleViewModel>>> GetBattleAndInvolvedSamuraisViaInclude(int battleId)
+        {
+            var battleModel = await _samuraiContext.Battles.Where(b => b.BattleId == battleId)
+                .Include(b => b.SamuraiBattles).ThenInclude(sb => sb.Samurai).FirstOrDefaultAsync();
+            var battleWithInvolvedSamuraisVM = new BattleViewModel();
+            battleWithInvolvedSamuraisVM.BattleId = battleModel.BattleId;
+            battleWithInvolvedSamuraisVM.Name = battleModel.Name;
+            battleWithInvolvedSamuraisVM.StartDate = battleModel.StartDate;
+            battleWithInvolvedSamuraisVM.EndDate = battleModel.EndDate;
+            battleWithInvolvedSamuraisVM.BattlePlace = battleModel.BattlePlace;
+            battleWithInvolvedSamuraisVM.InvolvedSamurais = battleModel.SamuraiBattles.Select(sb => sb.Samurai.Name).ToList();
+            return Ok(battleWithInvolvedSamuraisVM);
+        }
+
 
         [HttpPost("AddBattle")]
         public async Task<ActionResult<Battle>> CreateBattle([FromBody] Battle battle)
@@ -108,11 +132,5 @@ namespace SamuraiAppCW.Controllers
             return CreatedAtRoute("GetBattle", new { id = battle.BattleId }, battle);
         }
 
-        [HttpGet("GetBattle/{id}", Name = "GetBattle")]
-        public async Task<ActionResult<Battle>> GetBattle(int id)
-        {
-            var battle = await _samuraiContext.Battles.FirstOrDefaultAsync(b => b.BattleId == id);
-            return battle;
-        }
     }
 }

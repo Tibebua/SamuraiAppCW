@@ -10,6 +10,10 @@ namespace SamuraiAppCW.Models.Entities
         public int QuoteId { get; set; }
         public string Text { get; set; }
 
+        public QuoteEntity()
+        {
+
+        }
         public QuoteEntity(Quote model)
         {
             if(model != null)

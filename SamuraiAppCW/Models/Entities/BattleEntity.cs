@@ -12,6 +12,11 @@ namespace SamuraiAppCW.Models.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        public BattleEntity()
+        {
+
+        }
+
         public BattleEntity(Battle model)
         {
             BattleId = model.BattleId;

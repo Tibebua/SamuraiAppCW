@@ -9,8 +9,13 @@ namespace SamuraiAppCW.Models.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<QuoteEntity> QuoteEntities { get; set; }
-        public List<BattleEntity> BattleEntities { get; set; }
+        public IEnumerable<QuoteEntity> QuoteEntities { get; set; }
+        public IEnumerable<BattleEntity> BattleEntities { get; set; }
+
+        public SamuraiEntity()
+        {
+
+        }
 
         public SamuraiEntity(Samurai samuraiModel)
         {

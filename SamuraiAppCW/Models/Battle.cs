@@ -19,6 +19,7 @@ namespace SamuraiAppCW.Models
         // [Column(TypeName = "Date")] this also works, i just used the fluent api in the dbcontext
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string BattlePlace { get; set; }
         public ICollection<SamuraiBattle> SamuraiBattles { get; set; }
     }
 }
