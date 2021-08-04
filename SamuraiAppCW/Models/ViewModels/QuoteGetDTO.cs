@@ -9,5 +9,11 @@ namespace SamuraiAppCW.Models.ViewModels
     {
         public int QuoteId { get; set; }
         public string Text { get; set; }
+
+        public QuoteGetDTO(Quote model)
+        {
+            this.QuoteId = model.QuoteId;
+            this.Text = model.Text;
+        }
     }
 }

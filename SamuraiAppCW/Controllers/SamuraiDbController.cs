@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SamuraiAppCW.Data;
 using SamuraiAppCW.Models;
+using SamuraiAppCW.Models.Entities;
 using SamuraiAppCW.Models.ViewModels;
 
 namespace SamuraiAppCW.Controllers
@@ -74,6 +75,15 @@ namespace SamuraiAppCW.Controllers
                 Battles = s.SamuraiBattles.Select(s => s.Battle).Select(b => new { b.BattleId, b.Name, b.StartDate, b.EndDate }).ToList()
             });
             return Ok(samuraiWithBattles);
+        }
+
+        [HttpGet("GetSamuraiWithBattlesViaEntity/{samuraiId}", Name = "GetSamuraiWithBattlesViaEntity")]
+        public async Task<ActionResult<SamuraiEntity>> GetSamuraiWithBattlesViaEntity(int samuraiId)
+        {
+            var samuraiWithBattles = await _samuraiContext.Samurais.Include(s => s.Quotes).Include(s => s.SamuraiBattles)
+                .ThenInclude(sb => sb.Battle).Where(s => s.Id == samuraiId).FirstOrDefaultAsync();
+            var samuraiWithBattleEntity = new SamuraiEntity(samuraiWithBattles);
+            return samuraiWithBattleEntity;
         }
 
         [HttpGet("GetAllSamuraiWithBattlesViaSelect", Name = "GetAllSamuraiWithBattlesViaSelect")]
