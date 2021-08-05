@@ -8,6 +8,7 @@ namespace SamuraiAppCW.Models
 {
     public class SamuraiBattle
     {
+        [ForeignKey(nameof(Samurai))]
         public int SamuraiId { get; set; }
         public Samurai Samurai { get; set; }
         [ForeignKey(nameof(Battle))]

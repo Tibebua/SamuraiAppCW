@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SamuraiAppCW.Data;
 using SamuraiAppCW.Models;
+using SamuraiAppCW.Models.DTO;
 using SamuraiAppCW.Models.Entities;
 using SamuraiAppCW.Models.ViewModels;
 
@@ -130,6 +131,33 @@ namespace SamuraiAppCW.Controllers
             var obj = await _samuraiContext.Battles.AddAsync(battle);
             _samuraiContext.SaveChanges();            
             return CreatedAtRoute("GetBattle", new { id = battle.BattleId }, battle);
+        }
+
+        [HttpPost("AddBattlesToSamurai")]
+        public async Task<ActionResult<SamuraiEntity>> AddBattlesToSamurai([FromBody] BattlesAddToSamuraiDTO battlesToBeAddedToSamurai)
+        {
+            var samurai = await _samuraiContext.Samurais.Where(s => s.Id == battlesToBeAddedToSamurai.SamuraiId).FirstOrDefaultAsync();
+            foreach( Battle battle in battlesToBeAddedToSamurai.Battles)
+            {
+                samurai.SamuraiBattles.Add(new SamuraiBattle { Battle = battle });
+            }
+            await _samuraiContext.SaveChangesAsync();
+            return Ok(new SamuraiEntity(samurai));
+        }
+
+        [HttpPost("AddSamuraiWithQuotesAndBattles")]
+        public async Task<ActionResult> AddSamuraiWithQuotesAndBattles([FromBody] SamuraiWithQuotesAndBattlesAddDTO samuCreateWithBattles)
+        {
+            Samurai samurai;
+            samurai = samuCreateWithBattles.Samurai;
+            samurai.Quotes = samuCreateWithBattles.Samurai.Quotes;
+            foreach(Battle battle in samuCreateWithBattles.Battles)
+            {
+                samurai.SamuraiBattles.Add(new SamuraiBattle { Battle = battle});
+            }
+            _samuraiContext.Add(samurai);
+            await _samuraiContext.SaveChangesAsync();
+            return Ok(new SamuraiEntity(samurai));
         }
 
     }
