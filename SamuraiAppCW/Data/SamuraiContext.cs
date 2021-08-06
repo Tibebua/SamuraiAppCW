@@ -14,9 +14,31 @@ namespace SamuraiAppCW.Data
 
         public virtual DbSet<Samurai> Samurais { get; set; }
         public virtual DbSet<Quote> Quotes { get; set; }
+        public virtual DbSet<Battle> Battles { get; set; }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //    => optionsBuilder.LogTo(Console.WriteLine);
+
+        protected override void OnModelCreating(ModelBuilder modelbuilder)
+        {
+            modelbuilder.Entity<SamuraiBattle>().HasKey(x => new { x.SamuraiId, x.BattleRefId });
+            modelbuilder.Entity<Battle>().Property(b => b.StartDate).HasColumnType("Date");
+            modelbuilder.Entity<Battle>().Property(b => b.EndDate).HasColumnType("Date");
+
+            //If you name your foreign keys correctly or notify ef core about the discrepancy
+            // between the primary and foreign key names in the data annotation, you don't need the following
+            modelbuilder.Entity<SamuraiBattle>()
+                .HasOne(sb => sb.Samurai)
+                .WithMany(sb => sb.SamuraiBattles)
+                .HasForeignKey(sb => sb.SamuraiId);
+            modelbuilder.Entity<SamuraiBattle>()
+                .HasOne(sb => sb.Battle)
+                .WithMany(sb => sb.SamuraiBattles)
+                .HasForeignKey(sb => sb.BattleRefId);
+
+
+
+        }
 
     }
 }

@@ -28,6 +28,13 @@ namespace SamuraiAppCW.Services
             return Samurai;
         }
 
+        //public async Task<SamuraiWithBattlesVM> GetSamuraiWithHisBattles(int samuraiId)
+        //{
+        //    var samurai = await _samuraiRepo.GetSamuraiWithHisBattles(samuraiId);
+        //    SamuraiWithBattlesVM samuariWithBattle = new SamuraiWithBattlesVM();
+        //    samura
+        //}
+
         public async Task<Samurai> CreateSamurai(Samurai samurai)
         {
             return await _samuraiRepo.CreateSamurai(samurai);
@@ -36,6 +43,17 @@ namespace SamuraiAppCW.Services
         public async Task<bool> CreateSamurais(List<Samurai> samurais)
         {
             return await _samuraiRepo.CreateSamurais(samurais);
+        }
+        
+        // BATTLE
+        public async Task<Battle> CreateBattle(Battle battle)
+        {
+            return await _samuraiRepo.CreateBattle(battle);
+        }
+
+        public async Task<Battle> GetBattle(int Id)
+        {
+            return await _samuraiRepo.GetBattle(Id);
         }
     }
 }
