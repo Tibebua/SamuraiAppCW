@@ -62,6 +62,32 @@ namespace SamuraiAppCW.Controllers
             return Ok();
         }
 
+        
+        // QUOTE
+        [HttpPost("AddQuote")]
+        public async Task<ActionResult<Quote>> AddQuote([FromBody] Quote quote)
+        {
+            var obj = await _samuraiContext.Quotes.AddAsync(quote);
+            _samuraiContext.SaveChanges();
+            return quote;
+        }
+
+        [HttpGet("GetQuotesOrderedByLastModified")]
+        public ActionResult GetAllQuotesOrderedByLastModified()
+        {
+            //var quotes = from q in _samuraiContext.Quotes 
+            //             orderby EF.Property<DateTime>(q, "LastModifiedOn")
+            //             select q;
+            var quotes = _samuraiContext.Quotes.Select(q => new
+            {
+                Id = q.QuoteId,
+                Text = q.Text,
+                SamuraiId = q.SamuraiId,
+                LastModifiedOn = EF.Property<DateTime>(q, "LastModifiedOn")
+            }).OrderByDescending(q => EF.Property<DateTime>(q, "LastModifiedOn"));
+            return Ok(quotes);
+        }
+
         //BATTLE
         [HttpGet("GetSamuraiWithBattlesViaSelect/{samuraiId}", Name = "GetSamuraiWithBattlesViaSelect")]
         public async Task<ActionResult<SamuraiEntity>> GetSamuraiWithBattlesViaSelect(int samuraiId)
