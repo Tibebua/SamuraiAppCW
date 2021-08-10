@@ -62,6 +62,14 @@ namespace SamuraiAppCW.Controllers
             return Ok();
         }
 
+        [HttpPost("AddQuote")]
+        public async Task<ActionResult<Quote>> AddQuote([FromBody] Quote quote)
+        {
+            var obj = await _samuraiContext.Quotes.AddAsync(quote);
+            _samuraiContext.SaveChanges();
+            return quote;
+        }
+
         //BATTLE
         [HttpGet("GetSamuraiWithBattlesViaSelect/{samuraiId}", Name = "GetSamuraiWithBattlesViaSelect")]
         public async Task<ActionResult<SamuraiEntity>> GetSamuraiWithBattlesViaSelect(int samuraiId)

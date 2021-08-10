@@ -25,6 +25,9 @@ namespace SamuraiAppCW.Data
             modelbuilder.Entity<Battle>().Property(b => b.StartDate).HasColumnType("Date");
             modelbuilder.Entity<Battle>().Property(b => b.EndDate).HasColumnType("Date");
 
+            //Shadow properties for quote entity
+            modelbuilder.Entity<Quote>().Property<DateTime>("LastModifiedOn");
+
             //If you name your foreign keys correctly or notify ef core about the discrepancy
             // between the primary and foreign key names in the data annotation, you don't need the following
             modelbuilder.Entity<SamuraiBattle>()
@@ -35,9 +38,30 @@ namespace SamuraiAppCW.Data
                 .HasOne(sb => sb.Battle)
                 .WithMany(sb => sb.SamuraiBattles)
                 .HasForeignKey(sb => sb.BattleRefId);
+        }
 
+        public override int SaveChanges()
+        {
+            ChangeTracker.DetectChanges();
 
+            var modifiedQuoteEntries = ChangeTracker
+                .Entries<Quote>()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+            
+            foreach(var item in modifiedQuoteEntries)
+            {
+                item.Property("LastModifiedOn").CurrentValue = DateTime.Now;
+            }
+            
+            //foreach (var entry in ChangeTracker.Entries().Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
+            //{
+            //    if (entry.Entity.GetType().Name == nameof(Quote))  //GetType().Name = "Quotes", btw..
+            //    {
+            //        entry.Property("LastModifiedOn").CurrentValue = timestamp;
+            //    }
+            //}
 
+            return base.SaveChanges();
         }
 
     }
