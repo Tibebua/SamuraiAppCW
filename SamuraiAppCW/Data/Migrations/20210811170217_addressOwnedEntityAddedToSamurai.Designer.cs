@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SamuraiAppCW.Data;
 
 namespace SamuraiAppCW.Data.Migrations
 {
     [DbContext(typeof(SamuraiContext))]
-    partial class SamuraiContextModelSnapshot : ModelSnapshot
+    [Migration("20210811170217_addressOwnedEntityAddedToSamurai")]
+    partial class addressOwnedEntityAddedToSamurai
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,7 +112,7 @@ namespace SamuraiAppCW.Data.Migrations
 
             modelBuilder.Entity("SamuraiAppCW.Models.Samurai", b =>
                 {
-                    b.OwnsOne("SamuraiAppCW.Models.OwnedEntities.Address", "Address", b1 =>
+                    b.OwnsOne("SamuraiAppCW.Models.Address", "Address", b1 =>
                         {
                             b1.Property<int>("SamuraiId")
                                 .ValueGeneratedOnAdd()
@@ -137,32 +139,7 @@ namespace SamuraiAppCW.Data.Migrations
                                 .HasForeignKey("SamuraiId");
                         });
 
-                    b.OwnsOne("SamuraiAppCW.Models.OwnedEntities.FormalName", "FormalName", b1 =>
-                        {
-                            b1.Property<int>("SamuraiId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<string>("FirstName")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("FirstName");
-
-                            b1.Property<string>("LastName")
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("LastName");
-
-                            b1.HasKey("SamuraiId");
-
-                            b1.ToTable("Samurais");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SamuraiId");
-                        });
-
                     b.Navigation("Address");
-
-                    b.Navigation("FormalName");
                 });
 
             modelBuilder.Entity("SamuraiAppCW.Models.SamuraiBattle", b =>

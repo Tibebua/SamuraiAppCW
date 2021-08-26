@@ -28,6 +28,22 @@ namespace SamuraiAppCW.Data
             //Shadow properties for quote entity
             modelbuilder.Entity<Quote>().Property<DateTime>("LastModifiedOn");
 
+            //Samurai has owned property of address & also Formal name
+            modelbuilder.Entity<Samurai>().OwnsOne(
+                s => s.Address,
+                a =>
+                {
+                    a.Property(a => a.City).HasColumnName("City");
+                    a.Property(a => a.Street).HasColumnName("Street");
+                    a.Property(a => a.State).HasColumnName("State");
+                });
+            modelbuilder.Entity<Samurai>().OwnsOne(s => s.FormalName, f =>
+            {
+                f.Property(f => f.FirstName).HasColumnName("FirstName");
+                f.Property(f => f.LastName).HasColumnName("LastName"); //without the .hasColumnName it would be FormalName_LastName
+            });
+            //modelbuilder.Entity<Samurai>().OwnsOne(s => s.Address).Property(ad => ad.City).HasColumnName("City");
+
             //If you name your foreign keys correctly or notify ef core about the discrepancy
             // between the primary and foreign key names in the data annotation, you don't need the following
             modelbuilder.Entity<SamuraiBattle>()

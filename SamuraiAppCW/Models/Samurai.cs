@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamuraiAppCW.Models.OwnedEntities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,7 +18,9 @@ namespace SamuraiAppCW.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public FormalName FormalName { get; set; }
         public ICollection<Quote> Quotes { get; set; }
         public ICollection<SamuraiBattle> SamuraiBattles { get; set; }
+        public Address Address { get; set; }
     }
 }

@@ -46,6 +46,17 @@ namespace SamuraiAppCW.Controllers
             return Ok(samurai);
         }
 
+        [HttpGet("GetSamuraiResidentsOf/{city}")]
+        public async Task<ActionResult<Samurai>> GetSamuraiResidentsOf(string city)
+         {
+            var samurai = await _samuraiContext.Samurais.Include(s => s.Quotes).Where(s => s.Address.City == city).FirstOrDefaultAsync();
+            if (samurai == null)
+            {
+                return NotFound();
+            }
+            return Ok(samurai);
+        }
+
         [HttpPost("AddSamurai")]
         public async Task<ActionResult<Samurai>> CreateSamurai([FromBody] Samurai samurai)
         {
